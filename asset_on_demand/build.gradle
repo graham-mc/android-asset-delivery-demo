@@ -1,0 +1,8 @@
+apply plugin: 'com.android.asset-pack'
+
+assetPack {
+    packName = "asset_on_demand"
+    dynamicDelivery {
+        deliveryType = "on-demand"
+    }
+}
