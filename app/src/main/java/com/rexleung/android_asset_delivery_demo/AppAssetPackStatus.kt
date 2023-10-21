@@ -2,6 +2,9 @@ package com.rexleung.android_asset_delivery_demo
 
 import com.google.android.play.core.assetpacks.model.AssetPackStatus
 
+/**
+ * Created by rexchung on 21/10/2023.
+ */
 enum class AppAssetPackStatus {
     CANCELED,
     COMPLETED,

@@ -12,6 +12,9 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.play.core.assetpacks.*
 import com.rexleung.android_asset_delivery_demo.databinding.FragmentFirstBinding
 
+/**
+ * Created by rexchung on 21/10/2023.
+ */
 class FirstFragment : Fragment() {
 
     private var _binding: FragmentFirstBinding? = null
