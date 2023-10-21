@@ -33,6 +33,10 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    /**
+     * if using build.gradle
+     *  - assetPacks = [":asset_install_time", ":asset_fast_follow", ":asset_on_demand"]
+     */
     assetPacks += listOf(":asset_install_time", ":asset_fast_follow", ":asset_on_demand")
 }
 
