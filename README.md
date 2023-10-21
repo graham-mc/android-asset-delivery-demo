@@ -1,4 +1,4 @@
-# android-asset-delivery-demo
+# Android Asset Delivery Demo (Google Play)
 Create one (Android/ Kotlin) demo for Asset Delivery from Google Play
 
 ### Same Video
