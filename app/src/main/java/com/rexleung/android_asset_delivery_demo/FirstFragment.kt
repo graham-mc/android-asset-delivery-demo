@@ -2,7 +2,6 @@ package com.rexleung.android_asset_delivery_demo
 
 import android.net.Uri
 import android.os.Bundle
-import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,19 +26,7 @@ class FirstFragment : Fragment() {
 
     private val packStateListener = AssetPackStateUpdateListener { assetPackState ->
         val text = "\n" + "${assetPackState.name()} status:${AppAssetPackStatus.get(assetPackState.status())} error:${assetPackState.errorCode()} total:${assetPackState.bytesDownloaded()}/${assetPackState.totalBytesToDownload()}"
-        _binding?.vDownloadStatus?.append(text)
-
-        if (AppAssetPackStatus.get(assetPackState.status()) == AppAssetPackStatus.COMPLETED) {
-            when (assetPackState.name()) {
-                AppAssetPackConstant.packNameFastFollow -> {
-                    setupFastFollow()
-                }
-
-                AppAssetPackConstant.packNameOnDemand -> {
-                    setupOnDemand()
-                }
-            }
-        }
+        println(text)
     }
 
     override fun onCreateView(
@@ -56,26 +43,11 @@ class FirstFragment : Fragment() {
 
         setupAssetPack()
         setupView()
-        setupLog()
     }
 
     private fun setupView() {
         setupLocalAsset()
         setupInstallTime()
-        setupFastFollow()
-        setupOnDemand()
-
-        _binding?.vCheckPack?.setOnClickListener {
-            getPackStatus()
-        }
-        _binding?.vDownload?.setOnClickListener {
-            downloadPack()
-        }
-    }
-
-    private fun setupLog() {
-        _binding?.vPackStatus?.movementMethod = ScrollingMovementMethod()
-        _binding?.vDownloadStatus?.movementMethod = ScrollingMovementMethod()
     }
 
     private fun setupLocalAsset() {
@@ -104,80 +76,11 @@ class FirstFragment : Fragment() {
         }
     }
 
-    private fun setupFastFollow() {
-        with(_binding?.vFastFollow) {
-            val uri = Uri.parse("${getPackLocationPath(AppAssetPackConstant.packNameFastFollow)}/fast_follow.mp4")
-            val item = MediaItem.fromUri(uri)
-            val player = ExoPlayer.Builder(requireContext()).build()
-            this?.player = player
-
-            player.setMediaItem(item)
-            player.prepare()
-            player.play()
-        }
-    }
-
-    private fun setupOnDemand() {
-        with(_binding?.vOnDemand) {
-            val uri = Uri.parse("${getPackLocationPath(AppAssetPackConstant.packNameOnDemand)}/on_demand.mp4")
-            val item = MediaItem.fromUri(uri)
-            val player = ExoPlayer.Builder(requireContext()).build()
-            this?.player = player
-
-            player.setMediaItem(item)
-            player.prepare()
-            player.play()
-        }
-    }
-
     private fun setupAssetPack() {
         if (assetPackManager == null) {
             assetPackManager = AssetPackManagerFactory.getInstance(this.requireContext())
         }
         assetPackManager?.registerListener(packStateListener)
-    }
-
-    /**
-     * Action
-     */
-    private fun getPackStatus() {
-        try {
-            assetPackManager?.getPackStates(
-                listOf(
-                    AppAssetPackConstant.packNameFastFollow,
-                    AppAssetPackConstant.packNameOnDemand,
-                ),
-            )?.addOnCompleteListener { task ->
-                /**
-                 *  Display Log
-                 */
-                try {
-                    var text = ""
-                    task.result?.packStates()?.forEach {
-                        text += "\n ${it.key} status:${AppAssetPackStatus.get(it.value.status())} error:${it.value.errorCode()} total:${it.value.bytesDownloaded()}/${it.value.totalBytesToDownload()}"
-                    }
-
-                    _binding?.vPackStatus?.append(text)
-                } catch (e: Exception) {
-                    _binding?.vPackStatus?.append(e.message)
-                }
-            }
-        } catch (e: Exception) {
-            _binding?.vPackStatus?.append(e.message)
-        }
-    }
-
-    private fun downloadPack() {
-        try {
-            assetPackManager?.fetch(
-                listOf(
-                    AppAssetPackConstant.packNameFastFollow,
-                    AppAssetPackConstant.packNameOnDemand,
-                ),
-            )
-        } catch (e: Exception) {
-            _binding?.vDownloadStatus?.append(e.message)
-        }
     }
 
     private fun getPackLocationPath(namePack: String): String {
